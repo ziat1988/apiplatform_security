@@ -4,6 +4,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 Vue.component('cheese-whiz-app', CheeseWhizApp);
 
-const app = new Vue({
-    el: '#cheese-app'
-});
+window.onload= function (){
+    new Vue({
+        el: '#cheese-app'
+    });
+
+}

@@ -14,3 +14,7 @@ api_platform:
         jsonhal:
             mime_types:
                 - application/hal+json
+    patch_formats:
+        json: ['application/merge-patch+json']
+    swagger:
+        versions: [3]

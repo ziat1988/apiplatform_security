@@ -15,6 +15,7 @@ class FrontendController extends AbstractController
      */
     public function homepage()
     {
+
         return $this->render('frontend/homepage.html.twig');
     }
 }
