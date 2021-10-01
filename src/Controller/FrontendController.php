@@ -16,6 +16,17 @@ class FrontendController extends AbstractController
      */
     public function homepage(SerializerInterface $serializer)
     {
+        /*
+        // test add roles user
+        $em = $this->getDoctrine()->getManager();
+
+
+        $user = $this->getUser();
+        $user->setRoles(['ROLE_ADMIN']);
+
+        $em->flush();
+        die();
+        */
         return $this->render('frontend/homepage.html.twig',[
             'user'=>$serializer->serialize($this->getUser(),'jsonld')
         ]);
