@@ -14,17 +14,18 @@ class CheeseListingResourceTest extends CustomApiTestCase
 
         $client = self::createClient();
         $client->request('POST', '/api/cheeses',[
-            //'headers'=> ['Content-Type'=>'text/html'],
+            'headers'=> ['Content-Type'=>'text/html'],
             //'json'=>[]
-
-
         ]);
         $this->assertResponseStatusCodeSame(401);
 
-        $this->createUser('tom@yahoo.com','tom');
+        $this->createUserAndLogIn($client,'tom@yahoo.com','tom');
 
-        $this->logIn($client, 'tom@yahoo.com','tom');
+        $client->request('POST', '/api/cheeses',[
+            'headers'=> ['Content-Type'=>'application/json'],
+            //'json'=>[]
 
-
+        ]);
+        $this->assertResponseStatusCodeSame(400);  // invalid empty data
     }
 }

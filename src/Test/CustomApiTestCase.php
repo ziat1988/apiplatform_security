@@ -3,6 +3,7 @@ namespace App\Test;
 
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
+use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
 //use App\ApiPlatform\Test\Client;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,7 +37,7 @@ class CustomApiTestCase extends ApiTestCase
         return $user;
     }
 
-    protected function logIn(\ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client $client, string $email, string $password) :void {
+    protected function logIn(Client $client, string $email, string $password) :void {
         $client->request('POST', '/login', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
@@ -46,4 +47,12 @@ class CustomApiTestCase extends ApiTestCase
         ]);
         $this->assertResponseStatusCodeSame(204);
     }
+
+    protected function createUserAndLogIn(Client $client, string $email, string $password): User
+    {
+        $user = $this->createUser($email, $password);
+        $this->logIn($client, $email, $password);
+        return $user;
+    }
+
 }
