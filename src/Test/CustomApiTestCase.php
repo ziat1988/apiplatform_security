@@ -20,6 +20,10 @@ class CustomApiTestCase extends ApiTestCase
         $this->hashService =  self::getContainer()->get('security.password_hasher');
     }
 
+    protected function getEntityManager(): EntityManagerInterface
+    {
+        return self::getContainer()->get('doctrine')->getManager();
+    }
     protected function createUser(string $email, string $password) :User{
 
         $user = new User();
