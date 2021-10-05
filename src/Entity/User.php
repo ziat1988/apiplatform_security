@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     attributes={"security"="is_granted('ROLE_USER')"},
  *     itemOperations={
  *       "get",
- *       "put" = {"security" = "is_granted('ROLE_USER') and object == user"  },
+ *       "put" = {"security" = "is_granted('EDIT', object)"},
  *       "delete" = {"security" = "is_granted('ROLE_ADMIN')" }
  *     },
  *     collectionOperations={
