@@ -24,4 +24,24 @@ class UserResourceTest extends CustomApiTestCase
 
         $this->logIn($client, 'bin@yahoo.com', 'bin');
     }
+
+
+    public function testUpdateUser(){
+        $client = self::createClient();
+        $user = $this->createUserAndLogIn($client, 'yomi@example.com', 'foo');
+
+        // test put
+
+
+        $client->request('PUT', '/api/users/'.$user->getId(), [
+            'json' => [
+                'username' => 'new',
+            ]
+        ]);
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            'username' => 'new'
+        ]);
+
+    }
 }

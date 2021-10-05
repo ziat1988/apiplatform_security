@@ -48,6 +48,7 @@ class CheeseListingVoter extends Voter
                return false;
         }
 
+
         throw new \Exception(sprintf('Unhandled attribute "%s"', $attribute));
     }
 }
