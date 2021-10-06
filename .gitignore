@@ -1,7 +1,6 @@
 
 ###> symfony/framework-bundle ###
 /.env.local
-/.env.test
 /.env.local.php
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
@@ -21,3 +20,4 @@ yarn-error.log
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+/.env.test

@@ -2,6 +2,8 @@
 
 namespace App\Tests\Functional;
 
+use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Test\CustomApiTestCase;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 
@@ -49,7 +51,7 @@ class UserResourceTest extends CustomApiTestCase
         $client = self::createClient();
         $user = $this->createUserAndLogIn($client, 'cheeseplease@example.com', 'foo');
 
-        $user->setPhoneNumber('0760157255');
+        $user->setPhoneNumber('0760157352');
         $em = $this->getEntityManager();
         $em->flush();
 
@@ -60,6 +62,27 @@ class UserResourceTest extends CustomApiTestCase
 
         $data = $client->getResponse()->toArray(); // decode JSON to array
         $this->assertArrayNotHasKey('phoneNumber', $data);
+
+
+        // update roles user by query
+        $user = $em->getRepository(User::class)->find($user->getId());
+        $user->setRoles(['ROLE_ADMIN']);
+        $em->persist($user);
+        $em->flush();
+
+
+        // re logged after change roles
+        $this->logIn($client, 'cheeseplease@example.com', 'foo');
+
+        // GET again
+        $client->request('GET', '/api/users/'.$user->getId());
+
+        $this->assertJsonContains([
+            'phoneNumber' => '0760157352'
+        ]);
+
+
+
 
     }
 }
