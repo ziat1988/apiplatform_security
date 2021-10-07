@@ -15,12 +15,13 @@ class CheeseListingResourceTest extends CustomApiTestCase
 
         $client = self::createClient();
         $client->request('POST', '/api/cheeses',[
-            'headers'=> ['Content-Type'=>'text/html'],
-            //'json'=>[]
+
         ]);
         $this->assertResponseStatusCodeSame(401);
 
-        $this->createUserAndLogIn($client,'tom@yahoo.com','tom');
+        $authenticatedUser = $this->createUserAndLogIn($client, 'cheeseplease@example.com', 'foo');
+        $otherUser = $this->createUser('otheruser@example.com', 'foo');
+
 
         $client->request('POST', '/api/cheeses',[
             'headers'=> ['Content-Type'=>'application/json'],
@@ -28,6 +29,20 @@ class CheeseListingResourceTest extends CustomApiTestCase
 
         ]);
         $this->assertResponseStatusCodeSame(400);  // invalid empty data
+        $cheesyData = [
+            'title' => 'Mystery cheese... kinda green',
+            'description' => 'What mysteries does it hold?',
+            'price' => 5000
+        ];
+        $client->request('POST', '/api/cheeses', [
+            'json' => $cheesyData + ['owner' => '/api/users/'.$otherUser->getId()],
+        ]);
+        $this->assertResponseStatusCodeSame(400, 'not passing the correct owner');
+
+        $client->request('POST', '/api/cheeses', [
+            'json' => $cheesyData + ['owner' => '/api/users/'.$authenticatedUser->getId()],
+        ]);
+        $this->assertResponseStatusCodeSame(201);
     }
 
     public function testUpdateCheeseListing()

@@ -8,6 +8,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use App\Validator\IsValidOwner;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -18,7 +19,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiResource(
  *     collectionOperations={
  *     "get",
- *     "post" = {"security" = "is_granted('ROLE_USER')"}
+ *     "post" = {
+ *          "denormalization_context" = {"groups" = {"cheese_listing:write", "cheese_listing:collection:post"}},
+ *          "security" = "is_granted('ROLE_USER')"}
  *     },
  *     itemOperations={
  *          "get"={
@@ -99,8 +102,8 @@ class CheeseListing
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="cheeseListings")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"cheese_listing:read", "cheese_listing:write"})
-     * @Assert\Valid()
+     * @Groups({"cheese_listing:read", "cheese_listing:collection:post"})
+     * @IsValidOwner()
      */
     private $owner;
 
