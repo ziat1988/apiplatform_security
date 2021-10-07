@@ -33,7 +33,7 @@ class CheeseListingResourceTest extends CustomApiTestCase
             'json'=> $cheesyData
 
         ]);
-        $this->assertResponseStatusCodeSame(422,'missing owner');  // invalid empty data
+        $this->assertResponseStatusCodeSame(201);  // ok without onwer set
 
         $client->request('POST', '/api/cheeses', [
             'json' => $cheesyData + ['owner' => '/api/users/'.$otherUser->getId()],
