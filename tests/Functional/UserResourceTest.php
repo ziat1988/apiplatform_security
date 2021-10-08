@@ -75,7 +75,6 @@ class UserResourceTest extends CustomApiTestCase
         $data = $client->getResponse()->toArray(); // decode JSON to array
         $this->assertArrayNotHasKey('phoneNumber', $data);
 
-
         // update roles user by query
         $user = $em->getRepository(User::class)->find($user->getId());
         $user->setRoles(['ROLE_ADMIN']);

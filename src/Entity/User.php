@@ -84,7 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\CheeseListing", mappedBy="owner", cascade={"persist"}, orphanRemoval=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:write"})
      * @Assert\Valid()
      */
     private $cheeseListings;
@@ -186,7 +186,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-         $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public function setUsername(string $username): self
@@ -194,6 +194,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->username = $username;
 
         return $this;
+    }
+
+    /**
+     * @Groups({"user:read"})
+     * @SerializedName("cheeseListings")
+     */
+    public function getPublishedCheeseListing() :Collection
+    {
+        return $this->cheeseListings->filter(function(CheeseListing $cheeseItem){
+            return $cheeseItem->getIsPublished();
+        });
+
     }
 
     /**

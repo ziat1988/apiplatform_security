@@ -13,6 +13,29 @@ class CheeseListingResourceTest extends CustomApiTestCase
     use ReloadDatabaseTrait; // reset DATABASE each test
 
 
+    public function testGetCheeseListingItem(){
+        $client = self::createClient();
+        $user = $this->createUserAndLogIn($client,'cheeseplese@example.com', 'foo');
+
+        $cheeseListing1 = new CheeseListing('cheese1');
+        $cheeseListing1->setOwner($user);
+        $cheeseListing1->setPrice(1000);
+        $cheeseListing1->setDescription('cheese');
+        $cheeseListing1->setIsPublished(false);
+
+
+        $em = $this->getEntityManager();
+        $em->persist($cheeseListing1);
+        $em->flush();
+        $client->request('GET', '/api/cheeses/'.$cheeseListing1->getId());
+        $this->assertResponseStatusCodeSame(404);
+
+
+        $client->request('GET','api/users/'.$user->getId());
+        $data = $client->getResponse()->toArray();
+        $this->assertEmpty($data['cheeseListings']);
+    }
+
     public function testGetCheeseListingCollection(){
 
         $client = self::createClient();
@@ -88,6 +111,7 @@ class CheeseListingResourceTest extends CustomApiTestCase
         $cheeseListing->setOwner($user1);
         $cheeseListing->setPrice(1000);
         $cheeseListing->setDescription('mmmm');
+        $cheeseListing->setIsPublished(true);
 
         $em = $this->getEntityManager();
         $em->persist($cheeseListing);
