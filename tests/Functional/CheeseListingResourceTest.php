@@ -11,6 +11,38 @@ use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 class CheeseListingResourceTest extends CustomApiTestCase
 {
     use ReloadDatabaseTrait; // reset DATABASE each test
+
+
+    public function testGetCheeseListingCollection(){
+
+        $client = self::createClient();
+        $user = $this->createUser('cheeseplese@example.com', 'foo');
+        $cheeseListing1 = new CheeseListing('cheese1');
+        $cheeseListing1->setOwner($user);
+        $cheeseListing1->setPrice(1000);
+        $cheeseListing1->setDescription('cheese');
+
+        $cheeseListing2 = new CheeseListing('cheese2');
+        $cheeseListing2->setOwner($user);
+        $cheeseListing2->setPrice(1000);
+        $cheeseListing2->setDescription('cheese');
+        $cheeseListing2->setIsPublished(true);
+
+        $cheeseListing3 = new CheeseListing('cheese3');
+        $cheeseListing3->setOwner($user);
+        $cheeseListing3->setPrice(1000);
+        $cheeseListing3->setDescription('cheese');
+        $cheeseListing3->setIsPublished(true);
+
+        $em = $this->getEntityManager();
+        $em->persist($cheeseListing1);
+        $em->persist($cheeseListing2);
+        $em->persist($cheeseListing3);
+        $em->flush();
+        $client->request('GET', '/api/cheeses');
+        $this->assertJsonContains(['hydra:totalItems' => 2]);
+    }
+
     public function testCreateCheeseListing(){
 
         $client = self::createClient();
