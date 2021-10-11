@@ -27,6 +27,7 @@ final class AdminGroupsContextBuilder implements SerializerContextBuilderInterfa
             $context['groups'][] = $normalization ? 'admin:read' : 'admin:write';
         }
 
+
         return $context;
     }
 }

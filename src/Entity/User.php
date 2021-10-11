@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use App\Resolver\UserCollectionResolver;
 /**
  * @ApiResource(
  *     attributes={"security"="is_granted('ROLE_USER')"},
@@ -31,6 +32,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  *         },
  *     },
+ *
+ *     graphql={
+ *    "item_query",
+ *    "collection_query",
+ *
+ *    "collectionQuery"={"collection_query" = UserCollectionResolver::class}
+ *
+ *     },
+ *
  *     normalizationContext={"groups"={"user:read"}},
  *     denormalizationContext={"groups"={"user:write"}},
  * )

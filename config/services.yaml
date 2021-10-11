@@ -29,5 +29,15 @@ services:
         arguments: [ '@App\Serializer\AdminGroupsContextBuilder.inner' ]
         autoconfigure: false
 
+    App\Serializer\AdminGroupsGraphContextBuilder:
+        decorates: 'api_platform.graphql.serializer.context_builder'
+        arguments: [ '@App\Serializer\AdminGroupsGraphContextBuilder.inner' ]
+        autoconfigure: false
+
     App\Doctrine\CheeseListingSetOwnerListener:
         tags: [ doctrine.orm.entity_listener ]
+
+
+    App\Resolver\UserCollectionResolver:
+        tags:
+            - { name: api_platform.graphql.query_resolver }
